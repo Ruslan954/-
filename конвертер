@@ -1,0 +1,133 @@
+using System;
+
+class CurrencyConverter
+{
+    static double balanceUSD = 10000;
+    static double balanceEUR = 10000;
+    static double balanceGBP = 10000;
+
+    static double rateEURtoUSD = 1.1;
+    static double rateGBPtoUSD = 1.3;
+
+    static void Main()
+    {
+        Console.WriteLine("Доступные валюты: USD, EUR, GBP");
+        Console.WriteLine($"Начальный баланс: {balanceUSD} USD, {balanceEUR} EUR, {balanceGBP} GBP");
+
+        while (true)
+        {
+            Console.WriteLine("\\nВыберите действие:");
+            Console.WriteLine("1. Купить валюту");
+            Console.WriteLine("2. Продать валюту");
+            Console.WriteLine("3. Выйти");
+
+            int choice = Convert.ToInt32(Console.ReadLine());
+
+            switch (choice)
+            {
+                case 1:
+                    BuyCurrency();
+                    break;
+                case 2:
+                    SellCurrency();
+                    break;
+                case 3:
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Неверный выбор. Попробуйте снова.");
+                    break;
+            }
+        }
+    }
+
+    static void BuyCurrency()
+    {
+        Console.WriteLine("Введите код валюты для покупки (USD, EUR, GBP):");
+        string currency = Console.ReadLine().ToUpper();
+
+        Console.WriteLine("Введите сумму для покупки:");
+        double amount = Convert.ToDouble(Console.ReadLine());
+
+        switch (currency)
+        {
+            case "EUR":
+                double costInUSD = amount * rateEURtoUSD;
+                if (costInUSD <= balanceUSD)
+                {
+                    balanceUSD -= costInUSD;
+                    balanceEUR += amount;
+                    Console.WriteLine($"Куплено {amount} EUR за {costInUSD} USD");
+                }
+                else
+                {
+                    Console.WriteLine("Недостаточно средств для покупки.");
+                }
+                break;
+            case "GBP":
+                costInUSD = amount * rateGBPtoUSD;
+                if (costInUSD <= balanceUSD)
+                {
+                    balanceUSD -= costInUSD;
+                    balanceGBP += amount;
+                    Console.WriteLine($"Куплено {amount} GBP за {costInUSD} USD");
+                }
+                else
+                {
+                    Console.WriteLine("Недостаточно средств для покупки.");
+                }
+                break;
+            case "USD":
+                Console.WriteLine("Нельзя купить USD. Попробуйте еще раз.");
+                break;
+            default:
+                Console.WriteLine("Неверный код валюты.");
+                break;
+        }
+    }
+
+    static void SellCurrency()
+    {
+        Console.WriteLine("Введите код валюты для продажи (EUR, GBP):");
+        string currency = Console.ReadLine().ToUpper();
+
+        Console.WriteLine("Введите сумму для продажи:");
+        double amount = Convert.ToDouble(Console.ReadLine());
+
+        switch (currency)
+        {
+            case "EUR":
+                if (amount <= balanceEUR)
+                {
+                    double earningsInUSD = amount * rateEURtoUSD;
+                    balanceUSD += earningsInUSD;
+                    balanceEUR -= amount;
+                    Console.WriteLine($"Продано {amount} EUR за {earningsInUSD} USD");
+                }
+                else
+                {
+                    Console.WriteLine("Недостаточно валюты для продажи.");
+                }
+                break;
+            case "GBP":
+                if (amount <= balanceGBP)
+                {
+                    double earningsInUSD = amount * rateGBPtoUSD;
+                    balanceUSD += earningsInUSD;
+                    balanceGBP -= amount;
+                    Console.WriteLine($"Продано {amount} GBP за {earningsInUSD} USD");
+                }
+                else
+                {
+                    Console.WriteLine("Недостаточно валюты для продажи.");
+                }
+                break;
+            case "USD":
+                Console.WriteLine("Нельзя продать USD. Попробуйте еще раз.");
+                break;
+            default:
+                Console.WriteLine("Неверный код валюты.");
+                break;
+        }
+    }
+}
